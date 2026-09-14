@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feliz Aniversário Mimi 💕</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #ffe4ec 0%, #ffd1dc 50%, #ffc0cb 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #5a2a3a;
+    }
+
+    /* Partículas de coração flutuando */
+    .hearts-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 18px;
+      opacity: 0.25;
+      animation: floatHeart 12s linear infinite;
+    }
+
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(100vh) rotate(0deg) scale(0.6);
+        opacity: 0;
+      }
+      10% { opacity: 0.3; }
+      90% { opacity: 0.2; }
+      100% {
+        transform: translateY(-20vh) rotate(360deg) scale(1);
+        opacity: 0;
+      }
+    }
+
+    /* Telas */
+    .screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+      z-index: 10;
+    }
+
+    .screen.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ===== TELA 1: Entrada ===== */
+    #screen1 {
+      background: linear-gradient(160deg, #ffe6ee 0%, #ffd6e0 40%, #ffc9d6 100%);
+    }
+
+    .tulip-decoration {
+      position: absolute;
+      width: 80px;
+      height: auto;
+      opacity: 0.85;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .tulip-left-top {
+      top: 8%;
+      left: 4%;
+      transform: rotate(-15deg);
+      animation: sway 4s ease-in-out infinite;
+    }
+
+    .tulip-right-top {
+      top: 12%;
+      right: 5%;
+      transform: rotate(12deg) scaleX(-1);
+      animation: sway 5s ease-in-out infinite reverse;
+    }
+
+    .tulip-left-bottom {
+      bottom: 10%;
+      left: 6%;
+      transform: rotate(8deg);
+      animation: sway 4.5s ease-in-out infinite;
+    }
+
+    .tulip-right-bottom {
+      bottom: 8%;
+      right: 4%;
+      transform: rotate(-10deg) scaleX(-1);
+      animation: sway 3.8s ease-in-out infinite reverse;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(-8deg); }
+      50% { transform: rotate(8deg); }
+    }
+
+    .entry-content {
+      text-align: center;
+      z-index: 5;
+      position: relative;
+    }
+
+    .made-with-love {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+      color: #d6336c;
+      margin-bottom: 40px;
+      text-shadow: 0 2px 8px rgba(214, 51, 108, 0.2);
+      animation: pulseSoft 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulseSoft {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    .btn-entrar {
+      background: linear-gradient(135deg, #ff6b9d, #ff4d7a);
+      color: white;
+      border: none;
+      padding: 16px 48px;
+      font-size: 1.35rem;
+      font-weight: 700;
+      font-family: 'Quicksand', sans-serif;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(255, 77, 122, 0.4);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-entrar:hover {
+      transform: scale(1.08) translateY(-3px);
+      box-shadow: 0 12px 30px rgba(255, 77, 122, 0.55);
+    }
+
+    .btn-entrar:active {
+      transform: scale(0.95);
+    }
+
+    .btn-entrar.clicked {
+      animation: clickPop 0.5s ease;
+    }
+
+    @keyframes clickPop {
+      0% { transform: scale(1); }
+      40% { transform: scale(0.85); }
+      70% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    /* Efeito de corações no clique */
+    .click-hearts {
+      position: absolute;
+      pointer-events: none;
+      font-size: 24px;
+      animation: heartBurst 0.8s ease-out forwards;
+    }
+
+    @keyframes heartBurst {
+      0% {
+        transform: translate(0, 0) scale(0.5);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* ===== TELA 2: Mensagem ===== */
+    #screen2 {
+      background: linear-gradient(160deg, #fff0f5 0%, #ffe4ec 50%, #ffd6e3 100%);
+      padding: 30px 20px;
+    }
+
+    .message-box {
+      max-width: 640px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      padding: 40px 36px;
+      box-shadow: 0 20px 50px rgba(214, 51, 108, 0.15);
+      border: 2px solid rgba(255, 182, 193, 0.6);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
+    }
+
+    .message-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .message-text {
+      font-size: clamp(1.05rem, 3.2vw, 1.25rem);
+      line-height: 1.75;
+      color: #4a2c3a;
+      margin-bottom: 36px;
+    }
+
+    .message-text .highlight {
+      color: #d6336c;
+      font-weight: 700;
+    }
+
+    .btn-clique {
+      background: linear-gradient(135deg, #ff85a2, #ff5c8a);
+      color: white;
+      border: none;
+      padding: 14px 42px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      font-family: 'Quicksand', sans-serif;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(255, 92, 138, 0.4);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+
+    .btn-clique.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .btn-clique:hover {
+      transform: scale(1.07) translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255, 92, 138, 0.5);
+    }
+
+    /* ===== TELA 3: Imagem final ===== */
+    #screen3 {
+      background: linear-gradient(160deg, #ffe6ee 0%, #ffd1dc 50%, #ffc0cb 100%);
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .final-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      max-width: 900px;
+      width: 100%;
+      opacity: 0;
+      transform: scale(0.92);
+      transition: all 1s ease;
+    }
+
+    .final-content.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .anni-image {
+      max-width: 100%;
+      width: min(720px, 95vw);
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(214, 51, 108, 0.25);
+      border: 4px solid rgba(255, 255, 255, 0.7);
+    }
+
+    .i-love-you {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.8rem, 6vw, 3rem);
+      color: #ff2d6a;
+      text-shadow: 
+        0 0 10px rgba(255, 45, 106, 0.4),
+        0 0 20px rgba(255, 45, 106, 0.25),
+        2px 2px 0 #fff;
+      letter-spacing: 2px;
+      animation: lovePulse 1.8s ease-in-out infinite;
+      margin-top: 8px;
+    }
+
+    @keyframes lovePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    /* Esqueleto correndo */
+    .skeleton-container {
+      position: relative;
+      width: 100%;
+      height: 90px;
+      margin-top: 10px;
+      overflow: hidden;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .skeleton-runner {
+      position: absolute;
+      bottom: 8px;
+      left: -80px;
+      font-size: 52px;
+      animation: runAcross 6s linear infinite;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+    }
+
+    .did-you-see {
+      position: absolute;
+      bottom: 55px;
+      left: -120px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #5a2a3a;
+      background: rgba(255,255,255,0.85);
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space:nowrap;
+      animation: runAcross 6s linear infinite;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    @keyframes runAcross {
+      0% { left: -100px; }
+      100% { left: calc(100% + 40px); }
+    }
+
+    /* Responsivo */
+    @media (max-width: 600px) {
+      .message-box {
+        padding: 28px 22px;
+      }
+      .tulip-decoration {
+        width: 55px;
+      }
+      .btn-entrar {
+        padding: 14px 36px;
+        font-size: 1.15rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Corações flutuantes de fundo -->
+  <div class="hearts-bg" id="heartsBg"></div>
+
+  <!-- ========== TELA 1 ========== -->
+  <div class="screen active" id="screen1">
+    <!-- Tulipas decorativas (SVG simples) -->
+    <svg class="tulip-decoration tulip-left-top" viewBox="0 0 60 90" fill="none">
+      <path d="M30 90 V45" stroke="#4caf50" stroke-width="4" stroke-linecap="round"/>
+      <path d="M30 55 Q15 40 12 25 Q18 15 30 20 Q42 15 48 25 Q45 40 30 55" fill="#ff9eb5"/>
+      <path d="M30 20 Q25 5 30 0 Q35 5 30 20" fill="#ff7a9e"/>
+    </svg>
+    <svg class="tulip-decoration tulip-right-top" viewBox="0 0 60 90" fill="none">
+      <path d="M30 90 V45" stroke="#4caf50" stroke-width="4" stroke-linecap="round"/>
+      <path d="M30 55 Q15 40 12 25 Q18 15 30 20 Q42 15 48 25 Q45 40 30 55" fill="#ffb3c6"/>
+      <path d="M30 20 Q25 5 30 0 Q35 5 30 20" fill="#ff8fab"/>
+    </svg>
+    <svg class="tulip-decoration tulip-left-bottom" viewBox="0 0 60 90" fill="none">
+      <path d="M30 90 V45" stroke="#4caf50" stroke-width="4" stroke-linecap="round"/>
+      <path d="M30 55 Q15 40 12 25 Q18 15 30 20 Q42 15 48 25 Q45 40 30 55" fill="#ffc0cb"/>
+      <path d="M30 20 Q25 5 30 0 Q35 5 30 20" fill="#ff9eb5"/>
+    </svg>
+    <svg class="tulip-decoration tulip-right-bottom" viewBox="0 0 60 90" fill="none">
+      <path d="M30 90 V45" stroke="#4caf50" stroke-width="4" stroke-linecap="round"/>
+      <path d="M30 55 Q15 40 12 25 Q18 15 30 20 Q42 15 48 25 Q45 40 30 55" fill="#ff9eb5"/>
+      <path d="M30 20 Q25 5 30 0 Q35 5 30 20" fill="#ff7a9e"/>
+    </svg>
+
+    <div class="entry-content">
+      <div class="made-with-love">Feito com amor e carinho ❤️</div>
+      <button class="btn-entrar" id="btnEntrar">Entrar</button>
+    </div>
+  </div>
+
+  <!-- ========== TELA 2 ========== -->
+  <div class="screen" id="screen2">
+    <div class="message-box" id="messageBox">
+      <p class="message-text" id="messageText">
+        <span class="highlight">22 de agosto de 2026</span> foi o dia em que nos conhecemos.<br><br>
+        Naquele momento em que eu te vi, percebi imediatamente que você seria uma pessoa muito especial na minha vida.<br><br>
+        Por isso preparei este presente para você — pode não ser algo grandioso, mas é a mais sincera demonstração de carinho e paixão que consigo expressar.<br><br>
+        Naquele instante, não só me apaixonei... eu fiquei completamente <span class="highlight">caidinho</span> por você ksksksk 💕
+      </p>
+      <button class="btn-clique" id="btnClique">Clique ✨</button>
+    </div>
+  </div>
+
+  <!-- ========== TELA 3 ========== -->
+  <div class="screen" id="screen3">
+    <div class="final-content" id="finalContent">
+      <img src="aniversario-mimi.png" alt="Feliz Aniversário Mimi" class="anni-image">
+      <div class="i-love-you">I LOVE YOU 💖</div>
+      
+      <div class="skeleton-container">
+        <div class="did-you-see">Did you see that? 👀</div>
+        <div class="skeleton-runner">💀🏃‍♂️</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Corações de fundo
+    const heartsBg = document.getElementById('heartsBg');
+    const heartEmojis = ['💖', '💕', '💗', '🩷', '✨', '🌸'];
+    
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (8 + Math.random() * 8) + 's';
+      heart.style.animationDelay = Math.random() * 5 + 's';
+      heart.style.fontSize = (14 + Math.random() * 16) + 'px';
+      heartsBg.appendChild(heart);
+      
+      setTimeout(() => heart.remove(), 16000);
+    }
+    
+    // Criar corações periodicamente
+    setInterval(createHeart, 700);
+    for (let i = 0; i < 8; i++) createHeart();
+
+    // Função de troca de telas
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // Botão Entrar
+    const btnEntrar = document.getElementById('btnEntrar');
+    btnEntrar.addEventListener('click', (e) => {
+      // Animação de clique
+      btnEntrar.classList.add('clicked');
+      
+      // Corações explodindo
+      const rect = btnEntrar.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      for (let i = 0; i < 12; i++) {
+        const h = document.createElement('div');
+        h.className = 'click-hearts';
+        h.textContent = heartEmojis[Math.floor(Math.random() * 4)];
+        h.style.left = centerX + 'px';
+        h.style.top = centerY + 'px';
+        const angle = (i / 12) * Math.PI * 2;
+        const dist = 60 + Math.random() * 40;
+        h.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+        h.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 800);
+      }
+
+      // Transição
+      setTimeout(() => {
+        showScreen('screen2');
+        setTimeout(() => {
+          document.getElementById('messageBox').classList.add('show');
+          // Mostra o botão depois do texto aparecer
+          setTimeout(() => {
+            document.getElementById('btnClique').classList.add('show');
+          }, 1200);
+        }, 300);
+      }, 450);
+    });
+
+    // Botão Clique
+    document.getElementById('btnClique').addEventListener('click', () => {
+      showScreen('screen3');
+      setTimeout(() => {
+        document.getElementById('finalContent').classList.add('show');
+      }, 200);
+    });
+  </script>
+</body>
+</html>
